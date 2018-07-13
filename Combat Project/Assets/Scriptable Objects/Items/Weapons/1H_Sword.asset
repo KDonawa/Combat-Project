@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 771ee1d13364a6040a5acd0362fced85, type: 3}
+  m_Name: 1H_Sword
+  m_EditorClassIdentifier: 
+  actions:
+  - inputButton: 1
+    action:
+      actionType: 0
+      actionToPerform: {fileID: 11400000, guid: 5b50dddc47a23c34d97c9610a1117f46,
+        type: 2}
+      isMirrored: 0
+      rootMotionAction: 1
+  - inputButton: 2
+    action:
+      actionType: 0
+      actionToPerform: {fileID: 11400000, guid: 69577517605922044a8f09c6f26cbdff,
+        type: 2}
+      isMirrored: 0
+      rootMotionAction: 1
