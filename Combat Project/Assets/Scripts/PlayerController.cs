@@ -5,29 +5,58 @@ using UnityEngine;
 
 /*
 NOTES:
-
+setup offhand attacking
+change weapon inheritance to deal with shields and ranged weapons etc
+setup blocking
+set it up so that if wielding, arms wont move as much when running
+pass things by reference
+set up blocking
+evaluate how dual wielding will work
+set up a 2h weapon
 */
 [RequireComponent(typeof(Rigidbody), typeof(InputManager), typeof(StateManager))]
 public class PlayerController : MonoBehaviour {
 
-
-    public MovementData movementData;
-    public Transform cameraTransform; 
-    public Weapon equippedWeapon; // will need a function to reset this is if weapon is changed in game
-
-    #region References
-    InputManager inputManager;
-    StateManager stateManager;
-    Animator playerAnim; // an animator must be attached to the child of the game object this script is attached to
-    [HideInInspector] public Rigidbody rigid;
-    GameObject player; // note that player is the child of the Player Controller
+    #region SingletonPattern
+    protected static PlayerController singleton;
+    public static PlayerController Singleton
+    {
+        get
+        {
+            if (singleton == null) singleton = FindObjectOfType<PlayerController>();
+            return singleton;
+        }
+    }
     #endregion
 
+    #region References
+
+    // Components
+    InputManager inputManager;
+    [HideInInspector] public StateManager stateManager;
+    public Transform cameraTransform; // camera controller GameObject
+    [HideInInspector] public Animator playerAnim; // think about attaching the animator to the controller instead
+    [HideInInspector] public Rigidbody rigid;
+
+    // Scriptable Objects
+    public References references;
+    public MovementData movementData;
+    private AbilityContainer playerAbilities;
+
+    // Variables
+    [HideInInspector] public float moveAmount;
+    private float currentSpeed;
+
+    // Others
     Transform _transform;
-    float moveAmount;
+    GameObject player; // note that player is the child of the Player Controller
+
+    #endregion
 
     private void Awake()
-    {
+    {       
+        singleton = this;
+        references.PlayerControllerReference = this; // set reference to this script
         _transform = transform;
 
         rigid = GetComponent<Rigidbody>();
@@ -38,35 +67,49 @@ public class PlayerController : MonoBehaviour {
 
         player = playerAnim.gameObject; // reference to player game gameobject itself
         player.AddComponent<RootMotionHelper>();
-
     }
 
-    
+    private void Start()
+    {
+        playerAbilities = references.playerAbilities;
+    }
+
     private void Update()
     {
-        InputButton buttonPressed = inputManager.GetActionInput();
+        KeyCode buttonPressed = inputManager.CheckForUserInput();
 
-        if (buttonPressed == InputButton.None)
-            return;
-
-        Action action = equippedWeapon.GetAction(buttonPressed);
-        if (action != null)
+        if (buttonPressed == KeyCode.None)
         {
+            stateManager.ResetActiveState();
+
+            // reset anim bools
+
+            return;
+        }
+        if(buttonPressed == KeyCode.LeftShift)
+        {          
+            stateManager.AttemptActiveStateChange(ActionType.sprint);
+            return;
+        }
+
+        Action action = playerAbilities.GetAvailableAction(buttonPressed);
+        if (action != null)
+        {          
             ActionType type = action.actionType;
             if (stateManager.AttemptActiveStateChange(type))
             {
-                PerformAction(type, action);
+                PerformAction(type, /*equippedWeapon.location,*/ action);
             }
         }
     }
 
 
-    private void PerformAction(ActionType type, Action action = null)
+    private void PerformAction(ActionType type, /*WeaponLocation location,*/ Action action = null)
     {
         switch (type)
         {
             case ActionType.attack:
-                PerformAttackAction(action);
+                PerformAttackAction(action/*, location*/);
                 break;
             case ActionType.block:
                 break;
@@ -79,49 +122,53 @@ public class PlayerController : MonoBehaviour {
         }      
     }
 
-    private void PerformSprint()
+    private void PerformAttackAction(Action action/*, WeaponLocation location*/)
     {
-        playerAnim.SetBool("isSprinting", true);
+        playerAnim.applyRootMotion = action.rootMotionAction;
+        //playerAnim.SetBool("isMirrored", location == WeaponLocation.offHand);
+        Attack attack = (Attack)action;
+
+        playerAnim.Play(attack.animName);
+        //playerAnim.CrossFade(attack.attackAnim.value, 0.15f); // cross fade is buggy
     }
 
-    private void PerformAttackAction(Action action)
+    private void PerformBlockAction()
     {
-        playerAnim.applyRootMotion = action.rootMotionAction; // root motion messes up the camera
-        Attack attack = (Attack)action.actionToPerform;
 
-        //playerAnim.SetBool("mirror", action.isMirrored);
-        //if (attack.changeSpeed)
-            //playerAnim.SetFloat("speed", attack.animSpeed);
-        playerAnim.Play(attack.attackAnim.value);
-        //playerAnim.CrossFade(attack.attackAnim.value, 0.15f); // cross fade is buggy
     }
 
     private void FixedUpdate()
     {
-        inputManager.GetMovementInput();
+        HandlePlayerMovement();
+    }
 
+    private void HandlePlayerMovement()
+    {
         float h = inputManager.horizontal;
         float v = inputManager.vertical;
 
         moveAmount = Mathf.Clamp01(Mathf.Abs(h) + Mathf.Abs(v));
 
-
         if (moveAmount > 0f)
         {
             RotatePlayer(h, v);
-            MovePlayer(h, v);
+            MovePlayer(h, v);         
         }
-               
-        AnimatePlayerMovement(h, v);
-    }
+        else
+        {
+            currentSpeed = 0;
+        }
 
-    
+        AnimatePlayerMovement(h, v);
+
+
+    }
     private void MovePlayer(float h, float v)
     {
-        //float moveSpeed = stateManager.curActiveState == isSprinting ? movementData.sprintSpeed : movementData.runSpeed;
-        rigid.velocity = movementData.runSpeed * moveAmount * _transform.forward;
+        float moveSpeed = stateManager.curActiveState == ActiveState.Sprinting ? movementData.sprintSpeed : movementData.runSpeed;
+        currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, Time.deltaTime * 5);
+        rigid.velocity = currentSpeed * moveAmount * _transform.forward;
     }
-
     private void RotatePlayer(float h, float v)
     {
         Vector3 targetDir = cameraTransform.forward * v + cameraTransform.right * h;
@@ -131,7 +178,6 @@ public class PlayerController : MonoBehaviour {
         Quaternion currentRot = Quaternion.Slerp(_transform.rotation, targetRot, Time.deltaTime * moveAmount * movementData.turnSpeed);
         _transform.rotation = currentRot;
     }
-
     private void AnimatePlayerMovement(float h, float v)
     {     
         playerAnim.SetFloat("vertical", moveAmount, 0.15f, Time.deltaTime);

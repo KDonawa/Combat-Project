@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Movement Data")]
+[CreateAssetMenu(menuName = "Data/Movement Data")]
 public class MovementData : ScriptableObject {
 
     public float runSpeed;

@@ -3,33 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Items/Weapon")]
-public class Weapon : ScriptableObject {
+public class Weapon : Item {
 
-    // container which holds all actions associated with a specific weapon
-    // actions are assigned in the inspector
-    public ActionContainer[] actions; // consider making it a serialized field
+    public GameObject weaponPrefab;
+    //public WeaponLocation location;
+    //public WeaponType weaponType;
+    public WeaponHandType weaponHandType;
+    public LH_TransformData offHandData;
 
-    //public String oh_idle;
-    //public String th_idle;
-    //public GameObject weaponPrefab;
-
-    public Action GetAction(InputButton buttonPressed)
+    // add bools for which locations have equips, and use those bools to determine what action are performed
+    // for example, if we have main and off, an attack will cause both the weapons to move one after the next
+    Weapon()
     {
-        for (int k = 0; k < actions.Length; k++)
-        {
-            if (actions[k].inputButton == buttonPressed)
-                return actions[k].action;
-        }
-        return null;
+        itemType = ItemType.Weapon;
     }
-
 }
 
-[System.Serializable]
-public class ActionContainer
+public enum WeaponLocation
 {
-    public InputButton inputButton;
-    public Action action;
+    mainHand, offHand, bothHands
 }
+
+public enum WeaponType
+{
+    /*OneHandedMelee, TwoHandedMelee, OneHandedMagic, TwoHandedMagic, OneHandedRanged, TwoHandedRanged, Shield*/
+    
+}
+
+public enum WeaponHandType
+{
+    OneHanded, TwoHanded
+}
+
 
 

@@ -5,36 +5,50 @@ using UnityEngine;
 
 public class StateManager : MonoBehaviour {
 
+    #region SingletonPattern
+    protected static StateManager singleton;
+    public static StateManager Singleton
+    {
+        get
+        {
+            if (singleton == null) singleton = FindObjectOfType<StateManager>();
+            return singleton;
+        }
+    }
+    #endregion
 
+    #region Player States
+    public WieldState curWieldState;
     public ActiveState curActiveState;
-    public PassiveState curPassiveState;
+    public ActiveStateBools curActiveStateBools;
+    #endregion
 
+    #region References
+
+    // Components
     Animator playerAnim;
+    PlayerController playerController;
+
+    // Scriptable Objects
+    public References references;
+
+    #endregion
 
     private void Awake()
     {
+        singleton = this;
+        references.StateManagerReference = this; // set reference to this script
         playerAnim = GetComponentInChildren<Animator>();
 
-        ResetAllStates();
+        InitializeActiveState();
+        curWieldState = WieldState.Unarmed;
     }
 
-    private void LateUpdate()
+    private void Start()
     {
-        if (curActiveState != ActiveState.Default && playerAnim.GetBool("inDefaultState"))
-        {
-            ResetAllStates();
-        }
-
+        playerController = references.PlayerControllerReference;
     }
 
-    
-
-    void ResetAllStates()
-    {
-        curActiveState = ActiveState.Default;
-        curPassiveState.ResetPassiveStates();
-        playerAnim.applyRootMotion = false;
-    }
 
     public bool AttemptActiveStateChange(ActionType type)
     {
@@ -43,68 +57,99 @@ public class StateManager : MonoBehaviour {
             case ActionType.attack:
                 return AttemptChangeToAttackState();
             case ActionType.block:
-                //attempt to change to block state
-                return false;
+                return AttemptToChangeToBlockState();
             case ActionType.parry:
                 // attempt to change to parry state
                 return false;
-            case ActionType.spell:
-                // attempt to change to interact state
-                return false;
+            case ActionType.sprint:
+                return AttemptChangeToSprintState();
             default:
                 return false;
         }
     }
-    private bool AttemptChangeToAttackState()
+
+    private bool AttemptChangeToSprintState()
     {
-        // conditions which must be passed to be able to attack
-        curPassiveState.inAction = playerAnim.GetBool("inAction");
-        if (curPassiveState.inAction)
-            return false;
+        if (curActiveState == ActiveState.Sprinting) return false;
+        if (InAction()) return false;
+        if (playerController.moveAmount < 0.5f) return false;
         // if (!onGround) return false;
 
-        // conditions have been passed, so we can now change appropriate states
-
-        //****I THINK I SHOULD CALL RESET STATES HERE FIRST ****
-
-        curActiveState = ActiveState.Attacking;
-        curPassiveState.inAction = true;
-        curPassiveState.moveAllowed = false;
-        curPassiveState.rootMotionEnabled = true;
-        // maybe just set root motion here too. will decide later
+        //ResetActiveState(); // may not need this here
+        //Disable lockOn 
+        curActiveState = ActiveState.Sprinting;
         return true;
-
-
     }
+    private bool AttemptChangeToAttackState()
+    {
+        if (InAction()) return false;        
+        // if (!onGround) return false;
+
+        //ResetActiveState();
+        curActiveState = ActiveState.Attacking;
+        curActiveStateBools.moveAllowed = false;
+        curActiveStateBools.rootMotionEnabled = true;
+        return true;
+    }
+
+    private bool AttemptToChangeToBlockState()
+    {
+        return false;
+    }
+
+    public void UpdateWieldState(WieldState wieldState)
+    {
+        curWieldState = wieldState;
+    }
+    public void ResetActiveState()
+    {
+        if (curActiveState != ActiveState.Default && !InAction()) { InitializeActiveState(); }
+    }
+    private void InitializeActiveState()
+    {
+        curActiveState = ActiveState.Default;
+        curActiveStateBools.ResetActiveStateBools();
+        playerAnim.applyRootMotion = false;
+    }
+    public bool InAction()
+    {
+        return playerAnim.GetBool("inAction");
+    }
+    
+}
+
+public enum WieldState
+{
+    Unarmed, MainHandOnly, OffHandOnly, DualWielding, TwoHanded
 }
 
 // these states we chosen as we can only be in one of them at a time
 // subject to change as combat develops further
 public enum ActiveState
 {
-    Default, Attacking, Blocking, Interacting
+    Default, Attacking, Blocking, Interacting, Sprinting
 }
 
 // multiple states in this class can be true at the same time
 // these states can coexist with some of the Active States
 [System.Serializable]
-public class PassiveState
+public class ActiveStateBools
 {
     //public bool inLockedAction; // to check if we are currently performing an action that cannot be cancelled or overwritten
     // consider setting this based on info from the player weapon animation (see if the anim has a locked animation)
 
-    public bool inAction; // to check of we performing an action 
     public bool moveAllowed; // to check if we are able to walk while doing an action
     public bool rootMotionEnabled;
 
-    public void ResetPassiveStates()
+    public void ResetActiveStateBools()
     {
-        inAction = false;
         moveAllowed = true;
         rootMotionEnabled = false;
     }
 
 }
+
+
 
 
 

@@ -10,7 +10,7 @@ public class RootMotionHelper : MonoBehaviour {
     StateManager stateManager;   
     PlayerController player;
 
-    PassiveState curState;
+    ActiveStateBools curState;
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class RootMotionHelper : MonoBehaviour {
 
     private void Start()
     {
-        curState = stateManager.curPassiveState;
+        curState = stateManager.curActiveStateBools;
     }
 
     private void OnAnimatorMove()
