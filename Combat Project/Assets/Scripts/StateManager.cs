@@ -17,12 +17,6 @@ public class StateManager : MonoBehaviour {
     }
     #endregion
 
-    #region Player States
-    public WieldState curWieldState;
-    public ActiveState curActiveState;
-    public ActiveStateBools curActiveStateBools;
-    #endregion
-
     #region References
 
     // Components
@@ -34,6 +28,12 @@ public class StateManager : MonoBehaviour {
 
     #endregion
 
+    #region Player States
+    public WieldState curWieldState;
+    public ActiveState curActiveState;
+    public ActiveStateBools curActiveStateBools;
+    #endregion
+    
     private void Awake()
     {
         singleton = this;
@@ -83,7 +83,6 @@ public class StateManager : MonoBehaviour {
     private bool AttemptChangeToAttackState()
     {
         if (InAction()) return false;        
-        // if (!onGround) return false;
 
         //ResetActiveState();
         curActiveState = ActiveState.Attacking;

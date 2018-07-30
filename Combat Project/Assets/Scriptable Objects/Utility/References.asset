@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerEqippedItems: {fileID: 11400000, guid: d03060945d7e8214292bca93417e56b0, type: 2}
   playerInvetory: {fileID: 11400000, guid: c749a426dc1b200479dadaa34e0f08c1, type: 2}
-  playerAbilities: {fileID: 11400000, guid: f271ffc52b2321541ba7a087b0adddf2, type: 2}
+  abilityManager: {fileID: 11400000, guid: f271ffc52b2321541ba7a087b0adddf2, type: 2}

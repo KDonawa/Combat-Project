@@ -88,7 +88,22 @@ public class EquippedItems : ScriptableObject {
         UnequipWeaponSlot(WeaponLocation.offHand);
     }
 
-    private void UpdateWieldStateAndAbilitiesAndObserevdKeys()
+    public void UpdateWieldStateAndAbilitiesAndObserevdKeys()
+    {
+        UpdateWieldState();
+        UpdateAbilities();
+        UpdateObservedKeys();
+    }
+
+    private void UpdateObservedKeys()
+    {
+        references.abilityManager.UpdateObservedKeys();
+    }
+    private void UpdateAbilities()
+    {
+        references.abilityManager.UpdateAvailableActions(references.StateManagerReference.curWieldState);
+    }
+    private void UpdateWieldState()
     {
         WieldState wieldState;
         if (mainHandWeap == null)
@@ -107,11 +122,8 @@ public class EquippedItems : ScriptableObject {
         }
 
         references.StateManagerReference.UpdateWieldState(wieldState);
-
-        references.playerAbilities.UpdateAvailableActions(wieldState);
-
-        references.playerAbilities.UpdateObservedKeys();
     }
+
     private void SetWeaponTransform(WeaponLocation location)
     {
         PlayerController player = references.PlayerControllerReference;

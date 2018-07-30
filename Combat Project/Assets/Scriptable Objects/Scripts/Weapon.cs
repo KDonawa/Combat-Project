@@ -26,7 +26,7 @@ public enum WeaponLocation
 
 public enum WeaponType
 {
-    /*OneHandedMelee, TwoHandedMelee, OneHandedMagic, TwoHandedMagic, OneHandedRanged, TwoHandedRanged, Shield*/
+    OneHandedMelee, TwoHandedMelee, OneHandedMagic, TwoHandedMagic, OneHandedRanged, TwoHandedRanged, Shield
     
 }
 

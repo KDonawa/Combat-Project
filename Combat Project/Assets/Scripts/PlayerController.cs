@@ -5,9 +5,9 @@ using UnityEngine;
 
 /*
 NOTES:
-setup offhand attacking
 change weapon inheritance to deal with shields and ranged weapons etc
 setup blocking
+try to add sprinting to ability bar
 set it up so that if wielding, arms wont move as much when running
 pass things by reference
 set up blocking
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour {
     // Scriptable Objects
     public References references;
     public MovementData movementData;
-    private AbilityContainer playerAbilities;
+    private AbilityManager abilityManager;
 
     // Variables
     [HideInInspector] public float moveAmount;
@@ -71,11 +71,13 @@ public class PlayerController : MonoBehaviour {
 
     private void Start()
     {
-        playerAbilities = references.playerAbilities;
+        abilityManager = references.abilityManager;
+        references.playerEqippedItems.UpdateWieldStateAndAbilitiesAndObserevdKeys(); // here for now
     }
 
     private void Update()
     {
+        // Encapsulate all of this: ProcessUserInput
         KeyCode buttonPressed = inputManager.CheckForUserInput();
 
         if (buttonPressed == KeyCode.None)
@@ -92,7 +94,7 @@ public class PlayerController : MonoBehaviour {
             return;
         }
 
-        Action action = playerAbilities.GetAvailableAction(buttonPressed);
+        Action action = abilityManager.GetAvailableAction(buttonPressed);
         if (action != null)
         {          
             ActionType type = action.actionType;
@@ -102,7 +104,6 @@ public class PlayerController : MonoBehaviour {
             }
         }
     }
-
 
     private void PerformAction(ActionType type, /*WeaponLocation location,*/ Action action = null)
     {

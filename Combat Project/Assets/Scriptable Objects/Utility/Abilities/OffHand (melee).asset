@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f19ca84563a53347839a16c7c24a393, type: 3}
+  m_Name: OffHand (melee)
+  m_EditorClassIdentifier: 
+  abilities:
+  - action: {fileID: 11400000, guid: 79ec9469739b2cc4c8cebcae69338bfc, type: 2}
+    inputButton: 113
+  - action: {fileID: 11400000, guid: 6f3a2b22cd898c342bf9bc4c2c413154, type: 2}
+    inputButton: 101
+  - action: {fileID: 11400000, guid: 134b0c0bbdca4734887a1ff7a441894d, type: 2}
+    inputButton: 114
+  - action: {fileID: 11400000, guid: 9af44652838c65543bb60b018593403b, type: 2}
+    inputButton: 116

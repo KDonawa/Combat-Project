@@ -8,9 +8,8 @@ public abstract class Action : ScriptableObject{
 
     [HideInInspector] public ActionType actionType;
     public bool rootMotionAction; // can the player move while performing this action?
-    //bool isAnimationLocked; // what does it mean to be animation locked?? does it mean we can't move?
     public ButtonPressType pressType;
-     
+    
 }
 
 public enum ActionType

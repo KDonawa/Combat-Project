@@ -8,9 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f3d0b726f7bef347b443214eee593c9, type: 3}
-  m_Name: Player Movement Data
+  m_Script: {fileID: 11500000, guid: 0f19ca84563a53347839a16c7c24a393, type: 3}
+  m_Name: Unarmed
   m_EditorClassIdentifier: 
-  runSpeed: 6
-  sprintSpeed: 9
-  turnSpeed: 5
+  abilities:
+  - action: {fileID: 0}
+    inputButton: 0
+  - action: {fileID: 0}
+    inputButton: 0

@@ -32,7 +32,7 @@ public class References : ScriptableObject {
     [Header("Scriptable Objects")]
     public EquippedItems playerEqippedItems;
     public Inventory playerInvetory;
-    public AbilityContainer playerAbilities;
+    public AbilityManager abilityManager;
 
 
 }

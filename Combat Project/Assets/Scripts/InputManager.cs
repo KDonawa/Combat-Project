@@ -22,7 +22,6 @@ public class InputManager : MonoBehaviour {
     StateManager stateManager;
 
     // Scriptable Objects
-    public AbilityContainer abilityContainer;
     public References references;
 
     // Data Containers

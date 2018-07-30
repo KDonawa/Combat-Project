@@ -1862,57 +1862,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9830f561f80768b4f92139c1c15bc835, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &516977034
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 516977036}
-  - component: {fileID: 516977035}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &516977035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 516977034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56981ca7b99f14749a4cd72560f9e93c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MyList:
-  - AnGO: {fileID: 0}
-    AnInt: 0
-    AnFloat: 0
-    AnVector3: {x: 0, y: 0, z: 0}
-    AnIntArray: 
-  - AnGO: {fileID: 0}
-    AnInt: 0
-    AnFloat: 0
-    AnVector3: {x: 0, y: 0, z: 0}
-    AnIntArray: 
---- !u!4 &516977036
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 516977034}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.0802126, y: -0.2368561, z: -4.969391}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &534456345
 Prefab:
   m_ObjectHideFlags: 0
@@ -5001,9 +4950,9 @@ MonoBehaviour:
   cameraTransform: {fileID: 1132964802}
   playerAnim: {fileID: 0}
   rigid: {fileID: 0}
-  abilityContainer: {fileID: 11400000, guid: f271ffc52b2321541ba7a087b0adddf2, type: 2}
   references: {fileID: 11400000, guid: 2d507c29f45059c4ba7c56d7fa92307b, type: 2}
   movementData: {fileID: 11400000, guid: f06bad720f31e1145a170e94c71017e0, type: 2}
+  moveAmount: 0
 --- !u!136 &1415979431
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5028,7 +4977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a3298687e2dc874c9b0166fba7bc107, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  abilityContainer: {fileID: 11400000, guid: f271ffc52b2321541ba7a087b0adddf2, type: 2}
+  abilityManager: {fileID: 0}
   references: {fileID: 11400000, guid: 2d507c29f45059c4ba7c56d7fa92307b, type: 2}
   observedKeysHeld: 
   observedKeysOnDownPress: 
@@ -5048,7 +4997,6 @@ MonoBehaviour:
   curWieldState: 0
   curActiveState: 0
   curActiveStateBools:
-    inAction: 0
     moveAllowed: 0
     rootMotionEnabled: 0
   references: {fileID: 11400000, guid: 2d507c29f45059c4ba7c56d7fa92307b, type: 2}

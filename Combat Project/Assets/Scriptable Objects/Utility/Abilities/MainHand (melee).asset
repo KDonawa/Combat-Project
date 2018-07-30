@@ -8,17 +8,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 717b674bccd40c249bf78cf2e5e047eb, type: 3}
-  m_Name: Player Ability Container
+  m_Script: {fileID: 11500000, guid: 0f19ca84563a53347839a16c7c24a393, type: 3}
+  m_Name: MainHand (melee)
   m_EditorClassIdentifier: 
-  references: {fileID: 11400000, guid: 2d507c29f45059c4ba7c56d7fa92307b, type: 2}
-  mainHandAbilities:
-  - action: {fileID: 11400000, guid: 69577517605922044a8f09c6f26cbdff, type: 2}
-    inputButton: 49
+  abilities:
   - action: {fileID: 11400000, guid: 5b50dddc47a23c34d97c9610a1117f46, type: 2}
+    inputButton: 49
+  - action: {fileID: 11400000, guid: 69577517605922044a8f09c6f26cbdff, type: 2}
     inputButton: 50
-  offHandAbilities:
   - action: {fileID: 11400000, guid: eae5693969f97414db5f77ae7baa93fe, type: 2}
-    inputButton: 323
+    inputButton: 51
   - action: {fileID: 11400000, guid: 1bdf9f7bda15e39478d3f1f1b8cccfc7, type: 2}
-    inputButton: 324
+    inputButton: 52
